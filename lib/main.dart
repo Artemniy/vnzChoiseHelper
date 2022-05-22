@@ -12,12 +12,12 @@ Future<void> main() async {
       await $FloorAppDatabase.databaseBuilder('database').build();
 
   final universityDao = database.universityDao;
-  universityDao
+  /* universityDao
       .insertUnivercity(University(name: 'TestName', city: 'TestCity'));
   final list = await universityDao.findAllUniversities();
 
   log((list.toString()));
-
+ */
   runApp(const MyApp());
 }
 

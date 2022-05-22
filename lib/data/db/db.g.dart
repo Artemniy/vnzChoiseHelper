@@ -82,7 +82,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `University` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `shortName` TEXT, `city` TEXT, `region` TEXT, `lat` REAL, `lng` REAL, `studentsCount` INTEGER, `year` INTEGER, `rankingPosition` INTEGER, `rating` REAL, `employedGraduatesCount` INTEGER, `listedAbroad` INTEGER, `facultiesList` TEXT, `type` TEXT)');
+            'CREATE TABLE IF NOT EXISTS `University` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `shortName` TEXT, `city` TEXT, `region` TEXT, `lat` REAL, `lng` REAL, `studentsCount` INTEGER, `year` INTEGER, `rankingPosition` INTEGER, `rating` REAL, `address` TEXT, `phone` TEXT, `site` TEXT, `email` TEXT)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -114,12 +114,10 @@ class _$UniversityDao extends UniversityDao {
                   'year': item.year,
                   'rankingPosition': item.rankingPosition,
                   'rating': item.rating,
-                  'employedGraduatesCount': item.employedGraduatesCount,
-                  'listedAbroad': item.listedAbroad == null
-                      ? null
-                      : (item.listedAbroad! ? 1 : 0),
-                  'facultiesList': item.facultiesList,
-                  'type': item.type
+                  'address': item.address,
+                  'phone': item.phone,
+                  'site': item.site,
+                  'email': item.email
                 },
             changeListener);
 
@@ -146,12 +144,10 @@ class _$UniversityDao extends UniversityDao {
             year: row['year'] as int?,
             rankingPosition: row['rankingPosition'] as int?,
             rating: row['rating'] as double?,
-            employedGraduatesCount: row['employedGraduatesCount'] as int?,
-            listedAbroad: row['listedAbroad'] == null
-                ? null
-                : (row['listedAbroad'] as int) != 0,
-            facultiesList: row['facultiesList'] as String?,
-            type: row['type'] as String?));
+            address: row['address'] as String?,
+            email: row['email'] as String?,
+            phone: row['phone'] as String?,
+            site: row['site'] as String?));
   }
 
   @override
@@ -169,12 +165,10 @@ class _$UniversityDao extends UniversityDao {
             year: row['year'] as int?,
             rankingPosition: row['rankingPosition'] as int?,
             rating: row['rating'] as double?,
-            employedGraduatesCount: row['employedGraduatesCount'] as int?,
-            listedAbroad: row['listedAbroad'] == null
-                ? null
-                : (row['listedAbroad'] as int) != 0,
-            facultiesList: row['facultiesList'] as String?,
-            type: row['type'] as String?),
+            address: row['address'] as String?,
+            email: row['email'] as String?,
+            phone: row['phone'] as String?,
+            site: row['site'] as String?),
         arguments: [id],
         queryableName: 'University',
         isView: false);

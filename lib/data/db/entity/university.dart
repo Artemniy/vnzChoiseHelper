@@ -14,10 +14,10 @@ class University {
       this.year,
       this.rankingPosition,
       this.rating,
-      this.employedGraduatesCount,
-      this.listedAbroad,
-      this.facultiesList,
-      this.type});
+      this.address,
+      this.email,
+      this.phone,
+      this.site});
   @PrimaryKey(autoGenerate: true)
   int? id;
   String? name;
@@ -30,10 +30,10 @@ class University {
   int? year;
   int? rankingPosition;
   double? rating;
-  int? employedGraduatesCount;
-  bool? listedAbroad;
-  String? facultiesList;
-  String? type;
+  String? address;
+  String? phone;
+  String? site;
+  String? email;
 
   @override
   String toString() {
