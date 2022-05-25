@@ -13,7 +13,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   var _currentPage = 0;
   static const _pages = [
     MapPage(),
@@ -22,6 +21,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: _pages[_currentPage],
       bottomNavigationBar: BottomNavigationBar(
           onTap: (value) => setState(() => _currentPage = value),

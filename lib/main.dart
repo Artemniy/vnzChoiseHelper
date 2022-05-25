@@ -1,6 +1,4 @@
-import 'dart:developer';
 
-import 'package:dyplom/data/db/entity/university.dart';
 import 'package:dyplom/screens/splash.dart';
 import 'package:flutter/material.dart';
 
@@ -8,8 +6,7 @@ import 'data/db/db.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final database =
-      await $FloorAppDatabase.databaseBuilder('database').build();
+  final database = await $FloorAppDatabase.databaseBuilder('database').build();
 
   final universityDao = database.universityDao;
   /* universityDao
@@ -28,6 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
