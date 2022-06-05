@@ -24,6 +24,8 @@ class _HomeState extends State<Home> {
       resizeToAvoidBottomInset: false,
       body: _pages[_currentPage],
       bottomNavigationBar: BottomNavigationBar(
+          selectedItemColor: Colors.orange,
+          currentIndex: _currentPage,
           onTap: (value) => setState(() => _currentPage = value),
           items: const [
             BottomNavigationBarItem(

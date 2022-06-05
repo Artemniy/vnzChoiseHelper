@@ -128,7 +128,7 @@ class _MapPageState extends State<MapPage> {
                 right: 0,
                 top: 0,
                 child: Container(
-                  padding: const EdgeInsets.only(bottom: 10),
+                  padding: const EdgeInsets.only(bottom: 5),
                   color: Colors.white,
                   child: Column(
                     children: [
@@ -150,7 +150,8 @@ class _MapPageState extends State<MapPage> {
                             child: IconButton(
                                 onPressed: () {
                                   setState(() {
-                                    FocusScope.of(context).unfocus();
+                                    FocusManager.instance.primaryFocus
+                                        ?.unfocus();
                                     _searchController.clear();
                                     filteredUniversities = null;
                                   });
@@ -159,57 +160,60 @@ class _MapPageState extends State<MapPage> {
                           ),
                           IconButton(
                               onPressed: () {
-                                FocusScope.of(context).unfocus();
+                                FocusManager.instance.primaryFocus?.unfocus();
                               },
                               icon: const Icon(Icons.search)),
                         ],
                       ),
                       const SizedBox(
-                        height: 10,
+                        height: 5,
                       ),
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                            maxHeight:
-                                MediaQuery.of(context).size.height * 0.65),
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: filteredUniversities?.length ?? 0,
-                            itemBuilder: (_, index) => Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15),
-                                  child: TextButton(
-                                    onPressed: () {},
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 5),
-                                      width: double.infinity,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(
-                                            filteredUniversities!.values
-                                                    .toList()[index]
-                                                    .shortName ??
-                                                '',
-                                            style: const TextStyle(
-                                                color: Colors.black87),
-                                          ),
-                                          Text(
-                                            filteredUniversities!.values
-                                                    .toList()[index]
-                                                    .city ??
-                                                '',
-                                            style: const TextStyle(
-                                                color: Colors.black54,
-                                                fontSize: 12),
-                                          ),
-                                        ],
+                      Visibility(
+                        visible: searching,
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                              maxHeight:
+                                  MediaQuery.of(context).size.height * 0.65),
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: filteredUniversities?.length ?? 0,
+                              itemBuilder: (_, index) => Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15),
+                                    child: TextButton(
+                                      onPressed: () {},
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 5),
+                                        width: double.infinity,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              filteredUniversities!.values
+                                                      .toList()[index]
+                                                      .shortName ??
+                                                  '',
+                                              style: const TextStyle(
+                                                  color: Colors.black87),
+                                            ),
+                                            Text(
+                                              filteredUniversities!.values
+                                                      .toList()[index]
+                                                      .city ??
+                                                  '',
+                                              style: const TextStyle(
+                                                  color: Colors.black54,
+                                                  fontSize: 12),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                )),
+                                  )),
+                        ),
                       )
                     ],
                   ),
