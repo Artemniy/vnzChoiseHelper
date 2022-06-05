@@ -35,6 +35,8 @@ class University {
   String? site;
   String? email;
 
+  String get fullAddress =>
+      '${region ?? ''} область, ${city ?? ''}, ${address ?? ''}';
   @override
   String toString() {
     return '$id $name $city';

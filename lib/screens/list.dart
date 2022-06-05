@@ -1,5 +1,6 @@
 import 'package:dyplom/data/all_data.dart';
 import 'package:dyplom/data/db/entity/university.dart';
+import 'package:dyplom/screens/university.dart';
 import 'package:flutter/material.dart';
 
 import '../util/search_util.dart';
@@ -41,6 +42,17 @@ class _UnversitiesListState extends State<UniversitiesListPage> {
       }
     }
     setState(() {});
+  }
+
+  void _openUniversityPage(University university) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => UniversityPage(
+          university: university,
+        ),
+      ),
+    );
   }
 
   @override
@@ -90,7 +102,7 @@ class _UnversitiesListState extends State<UniversitiesListPage> {
                 itemBuilder: (_, i) {
                   return _UniversityItem(
                     university: (filteredUniversities ?? universities)[i],
-                    onPressed: () {},
+                    onPressed: _openUniversityPage,
                   );
                 },
                 separatorBuilder: (_, i) {
@@ -114,14 +126,14 @@ class _UnversitiesListState extends State<UniversitiesListPage> {
 class _UniversityItem extends StatelessWidget {
   final University university;
 
-  final VoidCallback onPressed;
+  final Function(University university) onPressed;
   const _UniversityItem(
       {Key? key, required this.university, required this.onPressed})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: onPressed,
+      onPressed: () => onPressed(university),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -135,7 +147,8 @@ class _UniversityItem extends StatelessWidget {
                 child: Center(
                   child: Text(
                     university.rankingPosition.toString(),
-                    style: const TextStyle(color: Colors.white),
+                    style: const TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -154,25 +167,11 @@ class _UniversityItem extends StatelessWidget {
           const SizedBox(
             height: 5,
           ),
-          Row(
-            children: [
-              Text(
-                '${university.region ?? ''} область, ',
-                style: _addressTextStyle,
-              ),
-              Text(
-                '${university.city ?? ''}, ',
-                style: _addressTextStyle,
-              ),
-              Expanded(
-                child: Text(
-                  university.address ?? '',
-                  style: _addressTextStyle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
+          Text(
+            university.fullAddress,
+            style: _addressTextStyle,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

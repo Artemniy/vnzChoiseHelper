@@ -9,7 +9,32 @@ class MapUtil {
         rotate: true,
         point: LatLng(university.lat!, university.lng!),
         builder: (context) {
-          return const Icon(Icons.location_on_rounded);
+          return Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 3),
+                child: Icon(
+                  Icons.location_on_rounded,
+                  size: 30,
+                  color: Colors.blue[400],
+                ),
+              ),
+              Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                    color: Colors.blue[400], shape: BoxShape.circle),
+                child: Center(
+                  child: Text(
+                    university.rankingPosition.toString(),
+                    style: const TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ],
+          );
         });
   }
 }
