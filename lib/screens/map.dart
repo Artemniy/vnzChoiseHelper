@@ -69,6 +69,16 @@ class _MapPageState extends State<MapPage> {
     setState(() {});
   }
 
+  void _onSearchResultTap(University university) {
+    setState(() {
+      _selectedUniversity = university;
+      searching = false;
+      FocusManager.instance.primaryFocus?.unfocus();
+      _searchController.text = university.shortName ?? '';
+      _mapController.move(LatLng(university.lat!, university.lng!), 16);
+    });
+  }
+
   void _onSearch(String value) {
     searching = true;
     filteredUniversities ??= {};
@@ -206,7 +216,9 @@ class _MapPageState extends State<MapPage> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 15),
                                   child: TextButton(
-                                    onPressed: () {},
+                                    onPressed: () => _onSearchResultTap(
+                                        filteredUniversities!.values
+                                            .toList()[index]),
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 5),
