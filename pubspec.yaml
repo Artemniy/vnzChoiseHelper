@@ -29,11 +29,13 @@ environment:
 dependencies:
   cupertino_icons: ^1.0.2
   floor: ^1.2.0
-  open_mail_app: ^0.4.5
   flutter:
     sdk: flutter
   flutter_map: ^0.14.0
+  flutter_rating_bar: ^4.0.1
+  flutter_svg: ^1.1.0
   latlong2: ^0.8.1
+  open_mail_app: ^0.4.5
   url_launcher: ^6.1.2
 
 dev_dependencies:

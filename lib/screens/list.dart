@@ -19,7 +19,6 @@ const _addressTextStyle = TextStyle(color: Colors.black54, fontSize: 14);
 class _UnversitiesListState extends State<UniversitiesListPage> {
   List<University> universities = [];
   List<University>? filteredUniversities;
-  final _focus = FocusNode();
   final _searchController = TextEditingController();
 
   @override
