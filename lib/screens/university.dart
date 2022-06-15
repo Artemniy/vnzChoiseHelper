@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class UniversityPage extends StatefulWidget {
   final University university;
@@ -167,7 +168,24 @@ class _UniversityPageState extends State<UniversityPage> {
                               ),
                             ]),
                       ),
-                    )
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    ElevatedButton(
+                        onPressed: () async {
+                          String googleUrl =
+                              'https://www.google.com/maps/search/?api=1&query=${university.lat},${university.lng}';
+                          try {
+                            await launchUrlString(googleUrl);
+                          } catch (e) {
+                            log(e.toString());
+                          }
+                        },
+                        child: const Text('Знайти маршрут')),
+                    const SizedBox(
+                      height: 50,
+                    ),
                   ],
                 ),
               ),

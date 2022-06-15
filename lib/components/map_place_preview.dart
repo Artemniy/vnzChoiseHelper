@@ -11,7 +11,11 @@ class MapPlacePreview extends StatelessWidget {
   final VoidCallback onCloseTap;
   final VoidCallback onDetailsTap;
 
-  const MapPlacePreview({Key? key, this.university, required this.onCloseTap, required this.onDetailsTap})
+  const MapPlacePreview(
+      {Key? key,
+      this.university,
+      required this.onCloseTap,
+      required this.onDetailsTap})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -85,7 +89,7 @@ class MapPlacePreview extends StatelessWidget {
                   ),
                   Text(university!.fullAddress),
                   const SizedBox(
-                    height: 5,
+                    height: 7,
                   ),
                   Row(
                     children: [
@@ -114,21 +118,7 @@ class MapPlacePreview extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(
-                    height: 7,
-                  ),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.phone,
-                        size: 15,
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      SelectableText(
-                        university!.phone ?? '',
-                      ),
-                    ],
+                    height: 5,
                   ),
                   Align(
                     alignment: Alignment.centerRight,
