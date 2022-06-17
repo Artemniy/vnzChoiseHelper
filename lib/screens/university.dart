@@ -40,7 +40,7 @@ class _UniversityPageState extends State<UniversityPage> {
                     SizedBox(
                       width: double.infinity,
                       child: Image.asset(
-                        'assets/test_univer.jpeg',
+                        'assets/test_univer.jpg',
                         fit: BoxFit.fitWidth,
                       ),
                     ),

@@ -1,10 +1,12 @@
+import 'package:dyplom/data/db/entity/university.dart';
 import 'package:dyplom/screens/list.dart';
 import 'package:flutter/material.dart';
 
 import 'map.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({Key? key, required this.universities}) : super(key: key);
+  final List<University> universities;
 
   @override
   State<StatefulWidget> createState() {
@@ -14,10 +16,11 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   var _currentPage = 0;
-  static const _pages = [
-    MapPage(),
-    UniversitiesListPage(),
+  late final _pages = [
+    MapPage(universities: widget.universities),
+    UniversitiesListPage(universities: widget.universities),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

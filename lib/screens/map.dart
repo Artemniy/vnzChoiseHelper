@@ -10,7 +10,8 @@ import '../data/all_data.dart';
 import '../data/db/entity/university.dart';
 
 class MapPage extends StatefulWidget {
-  const MapPage({Key? key}) : super(key: key);
+  const MapPage({Key? key, required this.universities}) : super(key: key);
+  final List<University> universities;
 
   @override
   State<StatefulWidget> createState() {
@@ -31,7 +32,7 @@ class _MapPageState extends State<MapPage> {
 
   @override
   void initState() {
-    _initList();
+    _initMap();
     _focus.addListener(_onFocusChange);
 
     super.initState();
@@ -61,8 +62,8 @@ class _MapPageState extends State<MapPage> {
                 UniversityPage(university: _selectedUniversity!)));
   }
 
-  Future<void> _initList() async {
-    universities = await AllData().getUniversities();
+  Future<void> _initMap() async {
+    universities = widget.universities;
     for (var item in universities) {
       markers.add(MapUtil.getMarker(item, () => _onMarkerTap(item)));
     }
@@ -195,7 +196,10 @@ class _MapPageState extends State<MapPage> {
                         ),
                         IconButton(
                             onPressed: () {
-                              FocusManager.instance.primaryFocus?.unfocus();
+                              setState(() {
+                                searching = false;
+                                FocusManager.instance.primaryFocus?.unfocus();
+                              });
                             },
                             icon: const Icon(Icons.search)),
                       ],

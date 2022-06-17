@@ -1,4 +1,3 @@
-import 'package:dyplom/data/all_data.dart';
 import 'package:dyplom/data/db/entity/university.dart';
 import 'package:dyplom/screens/university.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +5,10 @@ import 'package:flutter/material.dart';
 import '../util/search_util.dart';
 
 class UniversitiesListPage extends StatefulWidget {
-  const UniversitiesListPage({Key? key}) : super(key: key);
+  const UniversitiesListPage({Key? key, required this.universities})
+      : super(key: key);
 
+  final List<University> universities;
   @override
   State<StatefulWidget> createState() {
     return _UnversitiesListState();
@@ -27,8 +28,8 @@ class _UnversitiesListState extends State<UniversitiesListPage> {
     super.initState();
   }
 
-  Future<void> _initList() async {
-    universities = await AllData().getUniversities();
+  void _initList() {
+    universities = widget.universities;
     setState(() {});
   }
 
