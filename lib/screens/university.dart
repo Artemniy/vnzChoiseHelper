@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dyplom/data/db/entity/university.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -39,8 +40,35 @@ class _UniversityPageState extends State<UniversityPage> {
                   children: [
                     SizedBox(
                       width: double.infinity,
-                      child: Image.asset(
-                        'assets/test_univer.jpg',
+                      child: Image.network(
+                        university.imageUrl ?? '',
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            color: Colors.grey[300],
+                            height: MediaQuery.of(context).size.height * 0.25,
+                            child: const Center(
+                                child: Text(
+                              'Не вдалося завантажити',
+                              textAlign: TextAlign.center,
+                            )),
+                          );
+                        },
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Container(
+                            color: Colors.grey[300],
+                            height: MediaQuery.of(context).size.height * 0.25,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!
+                                    : null,
+                              ),
+                            ),
+                          );
+                        },
                         fit: BoxFit.fitWidth,
                       ),
                     ),
@@ -68,8 +96,9 @@ class _UniversityPageState extends State<UniversityPage> {
                           decoration: BoxDecoration(
                               color: Colors.blue[400], shape: BoxShape.circle),
                           child: Center(
-                            child: Text(
+                            child: AutoSizeText(
                               university.rankingPosition.toString(),
+                              maxLines: 1,
                               style: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
@@ -215,15 +244,17 @@ class _AppBar extends StatelessWidget {
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.arrow_back)),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
+            Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.7),
+                child: AutoSizeText(
                   name,
+                  maxLines: 1,
                   style: const TextStyle(
                       fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-              ],
+              ),
             ),
           ],
         ),

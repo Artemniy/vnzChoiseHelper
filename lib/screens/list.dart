@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dyplom/data/db/entity/university.dart';
 import 'package:dyplom/screens/university.dart';
 import 'package:flutter/material.dart';
@@ -145,8 +146,9 @@ class _UniversityItem extends StatelessWidget {
                 decoration: BoxDecoration(
                     color: Colors.blue[400], shape: BoxShape.circle),
                 child: Center(
-                  child: Text(
+                  child: AutoSizeText(
                     university.rankingPosition.toString(),
+                    maxLines: 1,
                     style: const TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dyplom/data/db/entity/university.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -38,8 +39,9 @@ class MapPlacePreview extends StatelessWidget {
                         decoration: BoxDecoration(
                             color: Colors.blue[400], shape: BoxShape.circle),
                         child: Center(
-                          child: Text(
+                          child: AutoSizeText(
                             university!.rankingPosition.toString(),
+                            maxLines: 1,
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
@@ -123,7 +125,7 @@ class MapPlacePreview extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerRight,
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.33,
+                      width: MediaQuery.of(context).size.width * 0.36,
                       child: TextButton(
                         onPressed: onDetailsTap,
                         child: Row(

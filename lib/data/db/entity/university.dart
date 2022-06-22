@@ -16,6 +16,7 @@ class University {
       this.rating,
       this.address,
       this.email,
+      this.imageUrl,
       this.phone,
       this.site});
   @PrimaryKey(autoGenerate: true)
@@ -34,6 +35,7 @@ class University {
   String? phone;
   String? site;
   String? email;
+  String? imageUrl;
 
   String get fullAddress =>
       '${region ?? ''} область, ${city ?? ''}, ${address ?? ''}';
