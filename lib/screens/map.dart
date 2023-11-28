@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong2/latlong.dart';
 
-import '../data/all_data.dart';
 import '../data/db/entity/university.dart';
 
 class MapPage extends StatefulWidget {

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "568053859002",
+    "project_id": "vnzchoicehelper",
+    "storage_bucket": "vnzchoicehelper.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:568053859002:android:afde77b51e0a403c44f883",
+        "android_client_info": {
+          "package_name": "com.vnz.choise.helper.dyplom"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCY0oOaP_QfR6YH43qlWbruhdWl-XpEeA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

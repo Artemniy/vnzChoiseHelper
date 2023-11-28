@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:dyplom/data/all_data.dart';
 import 'package:dyplom/data/db/entity/university.dart';
+import 'package:dyplom/data/firestore/firestore_repo.dart';
 import 'package:dyplom/screens/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -19,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
   bool _universitiesInited = false;
   bool _threeSecondsPassed = false;
   List<University>? _universities;
-  
+
   @override
   void initState() {
     _initUniversities();
@@ -38,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _initUniversities() async {
-    _universities = await AllData().getUniversities();
+    _universities = await FirestoreRepo().fetchAllUniversities();
     _universitiesInited = true;
     if (_threeSecondsPassed) {
       Navigator.pushReplacement(

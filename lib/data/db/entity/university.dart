@@ -1,6 +1,6 @@
-import 'package:floor/floor.dart';
+/* import 'package:floor/floor.dart';
 
-@entity
+@entity */
 class University {
   University(
       {this.id,
@@ -19,7 +19,7 @@ class University {
       this.imageUrl,
       this.phone,
       this.site});
-  @PrimaryKey(autoGenerate: true)
+  // @PrimaryKey(autoGenerate: true)
   int? id;
   String? name;
   String? shortName;
@@ -43,4 +43,27 @@ class University {
   String toString() {
     return '$id $name $city';
   }
+
+  University.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as int?,
+        name = json['name'] as String?,
+        shortName = json['shortName'] as String?,
+        city = json['city'] as String?,
+        region = json['region'] as String?,
+        lat = json['lat'] as double?,
+        lng = json['lng'] as double?,
+        studentsCount = json['studentsCount'] as int?,
+        year = json['year'] as int?,
+        rankingPosition = json['rankingPosition'] as int?,
+        rating = json['rating'] as double?,
+        address = json['address'] as String?,
+        phone = json['phone'] as String?,
+        site = json['site'] as String?,
+        email = json['email'] as String?,
+        imageUrl = json['imageUrl'] as String?;
+/* 
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'email': email,
+      }; */
 }
