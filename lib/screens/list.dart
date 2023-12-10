@@ -18,10 +18,23 @@ class UniversitiesListPage extends StatefulWidget {
 
 const _addressTextStyle = TextStyle(color: Colors.black54, fontSize: 14);
 
+const byRanking = 'За рейтингом';
+const byGmapsRate = 'За оцінкою';
+const byStudents = 'За кількістю студентів';
+const byYear = 'За роком заснування';
+
+const sortValues = [byRanking, byGmapsRate, byStudents, byYear];
+
+const ascending = 'По зростанню';
+const descending = 'По спаданню';
+const orderValues = [ascending, descending];
+
 class _UnversitiesListState extends State<UniversitiesListPage> {
   List<University> universities = [];
   List<University>? filteredUniversities;
   final _searchController = TextEditingController();
+  String? _sortValue = sortValues[0];
+  String? _orderValue = orderValues[0];
 
   @override
   void initState() {
@@ -30,7 +43,7 @@ class _UnversitiesListState extends State<UniversitiesListPage> {
   }
 
   void _initList() {
-    universities = widget.universities;
+    universities = List.from(widget.universities);
     setState(() {});
   }
 
@@ -41,6 +54,31 @@ class _UnversitiesListState extends State<UniversitiesListPage> {
       if (SearchUtil.contains(univer, value)) {
         filteredUniversities?.add(univer);
       }
+    }
+    setState(() {});
+  }
+
+  void _onFilterValuesChanged() {
+    switch (_sortValue) {
+      case byGmapsRate:
+        universities.sort((a, b) => (a.rating ?? 0).compareTo(b.rating ?? 0));
+        break;
+      case byRanking:
+        universities.sort((a, b) =>
+            (a.rankingPosition ?? 0).compareTo(b.rankingPosition ?? 0));
+        break;
+      case byStudents:
+        universities.sort(
+            (a, b) => (a.studentsCount ?? 0).compareTo(b.studentsCount ?? 0));
+        break;
+      case byYear:
+        universities.sort((a, b) => (a.year ?? 0).compareTo(b.year ?? 0));
+        break;
+      default:
+        break;
+    }
+    if (_orderValue == descending) {
+      universities = List.from(universities.reversed);
     }
     setState(() {});
   }
@@ -66,6 +104,7 @@ class _UnversitiesListState extends State<UniversitiesListPage> {
             Padding(
               padding: const EdgeInsets.only(bottom: 5),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(
                     width: 20,
@@ -96,6 +135,40 @@ class _UnversitiesListState extends State<UniversitiesListPage> {
                       icon: const Icon(Icons.search)),
                 ],
               ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                DropdownButton<String?>(
+                    items: sortValues
+                        .map((e) => DropdownMenuItem<String?>(
+                              child: Text(e),
+                              value: e,
+                            ))
+                        .toList(),
+                    value: _sortValue,
+                    onChanged: (value) {
+                      if (value == null) return;
+
+                      _sortValue = value;
+
+                      _onFilterValuesChanged();
+                    }),
+                DropdownButton<String?>(
+                    items: orderValues
+                        .map((e) => DropdownMenuItem<String?>(
+                              child: Text(e),
+                              value: e,
+                            ))
+                        .toList(),
+                    value: _orderValue,
+                    onChanged: (value) {
+                      if (value == null) return;
+
+                      _orderValue = value;
+                      _onFilterValuesChanged();
+                    }),
+              ],
             ),
             Expanded(
               child: ListView.separated(
