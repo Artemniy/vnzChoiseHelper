@@ -36,6 +36,7 @@ class University {
   String? site;
   String? email;
   String? imageUrl;
+  bool? favourite;
 
   String get fullAddress =>
       '${region ?? ''} область, ${city ?? ''}, ${address ?? ''}';

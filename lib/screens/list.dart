@@ -1,14 +1,17 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dyplom/data/db/entity/university.dart';
 import 'package:dyplom/screens/university.dart';
+import 'package:dyplom/util/hive_util.dart';
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 
 import '../util/search_util.dart';
 
 class UniversitiesListPage extends StatefulWidget {
-  const UniversitiesListPage({Key? key, required this.universities})
+  const UniversitiesListPage(
+      {Key? key, required this.universities, this.favourites = false})
       : super(key: key);
-
+  final bool favourites;
   final List<University> universities;
   @override
   State<StatefulWidget> createState() {
@@ -42,9 +45,25 @@ class _UnversitiesListState extends State<UniversitiesListPage> {
     super.initState();
   }
 
-  void _initList() {
-    universities = List.from(widget.universities);
-    setState(() {});
+  Future<void> _initList() async {
+    final favIdList = await HiveUtil.getFavouriteUniversities();
+    if (widget.favourites) {
+      List<University> allUniversities = List.from(widget.universities);
+      universities = [];
+      for (var fav in favIdList) {
+        final uni = allUniversities.firstWhereOrNull((e) => e.id == fav);
+        uni?.favourite = true;
+        if (uni != null) universities.add(uni);
+      }
+      setState(() {});
+    } else {
+      universities = List.from(widget.universities);
+      for (var fav in favIdList) {
+        final uni = universities.firstWhereOrNull((e) => e.id == fav);
+        uni?.favourite = true;
+      }
+      setState(() {});
+    }
   }
 
   void _onSearch(String value) {
@@ -171,24 +190,26 @@ class _UnversitiesListState extends State<UniversitiesListPage> {
               ],
             ),
             Expanded(
-              child: ListView.separated(
-                itemCount: (filteredUniversities ?? universities).length,
-                itemBuilder: (_, i) {
-                  return _UniversityItem(
-                    university: (filteredUniversities ?? universities)[i],
-                    onPressed: _openUniversityPage,
-                  );
-                },
-                separatorBuilder: (_, i) {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5),
-                    child: Divider(
-                      height: 1,
-                      color: Colors.black54,
+              child: widget.universities.isEmpty
+                  ? const Center(child: Text('Нема даних'))
+                  : ListView.separated(
+                      itemCount: (filteredUniversities ?? universities).length,
+                      itemBuilder: (_, i) {
+                        return _UniversityItem(
+                          university: (filteredUniversities ?? universities)[i],
+                          onPressed: _openUniversityPage,
+                        );
+                      },
+                      separatorBuilder: (_, i) {
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          child: Divider(
+                            height: 1,
+                            color: Colors.black54,
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
             ),
           ],
         ),
@@ -197,57 +218,92 @@ class _UnversitiesListState extends State<UniversitiesListPage> {
   }
 }
 
-class _UniversityItem extends StatelessWidget {
+class _UniversityItem extends StatefulWidget {
   final University university;
 
   final Function(University university) onPressed;
   const _UniversityItem(
       {Key? key, required this.university, required this.onPressed})
       : super(key: key);
+
+  @override
+  State<_UniversityItem> createState() => _UniversityItemState();
+}
+
+class _UniversityItemState extends State<_UniversityItem> {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () => onPressed(university),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      onPressed: () => widget.onPressed(widget.university),
+      child: Row(
         children: [
-          Row(
-            children: [
-              Container(
-                width: 24,
-                height: 24,
-                decoration: BoxDecoration(
-                    color: Colors.blue[400], shape: BoxShape.circle),
-                child: Center(
-                  child: AutoSizeText(
-                    university.rankingPosition.toString(),
-                    maxLines: 1,
-                    style: const TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                          color: Colors.blue[400], shape: BoxShape.circle),
+                      child: Center(
+                        child: AutoSizeText(
+                          widget.university.rankingPosition.toString(),
+                          maxLines: 1,
+                          style: const TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      widget.university.shortName ?? '',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.black87),
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Text(
-                university.shortName ?? '',
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: Colors.black87),
-              ),
-            ],
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  widget.university.fullAddress,
+                  style: _addressTextStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
           ),
-          const SizedBox(
-            height: 5,
-          ),
-          Text(
-            university.fullAddress,
-            style: _addressTextStyle,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
+          IconButton(
+            onPressed: () {
+              setState(() {
+                widget.university.favourite =
+                    !(widget.university.favourite ?? false);
+                if (widget.university.id == null) return;
+
+                if (widget.university.favourite ?? false) {
+                  HiveUtil.setFavouriteUniversity(widget.university.id!);
+                } else {
+                  HiveUtil.removeFavouriteUniversity(widget.university.id!);
+                }
+              });
+            },
+            icon: Icon(
+              widget.university.favourite ?? false
+                  ? Icons.star
+                  : Icons.star_border,
+              color: widget.university.favourite ?? false
+                  ? Colors.amber
+                  : Colors.black26,
+            ),
+          )
         ],
       ),
     );

@@ -18,7 +18,15 @@ class _HomeState extends State<Home> {
   var _currentPage = 0;
   late final _pages = [
     MapPage(universities: widget.universities),
-    UniversitiesListPage(universities: widget.universities),
+    UniversitiesListPage(
+      universities: widget.universities,
+      key: const ValueKey(0),
+    ),
+    UniversitiesListPage(
+      key: const ValueKey(1),
+      universities: widget.universities,
+      favourites: true,
+    )
   ];
 
   @override
@@ -38,6 +46,10 @@ class _HomeState extends State<Home> {
             BottomNavigationBarItem(
               label: 'Список',
               icon: Icon(Icons.list_alt),
+            ),
+            BottomNavigationBarItem(
+              label: 'Обране',
+              icon: Icon(Icons.star_outline),
             ),
           ]),
     );
