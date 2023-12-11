@@ -2,12 +2,13 @@ import 'dart:developer';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dyplom/data/db/entity/university.dart';
+import 'package:dyplom/util/hive_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class MapPlacePreview extends StatelessWidget {
+class MapPlacePreview extends StatefulWidget {
   final University? university;
   final VoidCallback onCloseTap;
   final VoidCallback onDetailsTap;
@@ -18,9 +19,17 @@ class MapPlacePreview extends StatelessWidget {
       required this.onCloseTap,
       required this.onDetailsTap})
       : super(key: key);
+
+  @override
+  State<MapPlacePreview> createState() => _MapPlacePreviewState();
+}
+
+class _MapPlacePreviewState extends State<MapPlacePreview> {
+ 
+
   @override
   Widget build(BuildContext context) {
-    return university == null
+    return widget.university == null
         ? const SizedBox()
         : Card(
             shape: RoundedRectangleBorder(
@@ -40,7 +49,7 @@ class MapPlacePreview extends StatelessWidget {
                             color: Colors.blue[400], shape: BoxShape.circle),
                         child: Center(
                           child: AutoSizeText(
-                            university!.rankingPosition.toString(),
+                            widget.university!.rankingPosition.toString(),
                             maxLines: 1,
                             style: const TextStyle(
                                 color: Colors.white,
@@ -50,7 +59,7 @@ class MapPlacePreview extends StatelessWidget {
                       ),
                       const Spacer(),
                       IconButton(
-                          onPressed: onCloseTap,
+                          onPressed: widget.onCloseTap,
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(),
                           icon: const Icon(Icons.close))
@@ -60,7 +69,7 @@ class MapPlacePreview extends StatelessWidget {
                     height: 5,
                   ),
                   Text(
-                    university!.name ?? '',
+                    widget.university!.name ?? '',
                     style: const TextStyle(fontSize: 18),
                   ),
                   const SizedBox(
@@ -69,7 +78,7 @@ class MapPlacePreview extends StatelessWidget {
                   Row(
                     children: [
                       RatingBar.builder(
-                        initialRating: university!.rating ?? 0,
+                        initialRating: widget.university!.rating ?? 0,
                         minRating: 1,
                         ignoreGestures: true,
                         direction: Axis.horizontal,
@@ -83,13 +92,13 @@ class MapPlacePreview extends StatelessWidget {
                         ),
                         onRatingUpdate: (rating) {},
                       ),
-                      Text('(${(university!.rating ?? 0).toString()})'),
+                      Text('(${(widget.university!.rating ?? 0).toString()})'),
                     ],
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  Text(university!.fullAddress),
+                  Text(widget.university!.fullAddress),
                   const SizedBox(
                     height: 7,
                   ),
@@ -107,13 +116,14 @@ class MapPlacePreview extends StatelessWidget {
                       GestureDetector(
                         onTap: () async {
                           try {
-                            await launchUrl(Uri.parse(university!.site ?? ''));
+                            await launchUrl(
+                                Uri.parse(widget.university!.site ?? ''));
                           } catch (e) {
                             log(e.toString());
                           }
                         },
                         child: Text(
-                          university!.site ?? '',
+                          widget.university!.site ?? '',
                           style: TextStyle(color: Colors.blue[400]),
                         ),
                       ),
@@ -122,35 +132,63 @@ class MapPlacePreview extends StatelessWidget {
                   const SizedBox(
                     height: 5,
                   ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.36,
-                      child: TextButton(
-                        onPressed: onDetailsTap,
-                        child: Row(
-                          children: [
-                            const Text(
-                              'Детальніше',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(3),
-                              decoration: const BoxDecoration(
-                                  shape: BoxShape.circle, color: Colors.orange),
-                              child: const Icon(
-                                Icons.arrow_forward_ios,
-                                size: 15,
-                                color: Colors.white,
-                              ),
-                            )
-                          ],
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            widget.university!.favourite =
+                                !(widget.university!.favourite ?? false);
+                            if (widget.university!.id == null) return;
+
+                            if (widget.university!.favourite ?? false) {
+                              HiveUtil.setFavouriteUniversity(
+                                  widget.university!.id!);
+                            } else {
+                              HiveUtil.removeFavouriteUniversity(
+                                  widget.university!.id!);
+                            }
+                          });
+                        },
+                        icon: Icon(
+                          widget.university!.favourite ?? false
+                              ? Icons.star
+                              : Icons.star_border,
+                          color: widget.university!.favourite ?? false
+                              ? Colors.amber
+                              : Colors.black26,
                         ),
                       ),
-                    ),
+                      const Spacer(),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.36,
+                        child: TextButton(
+                          onPressed: widget.onDetailsTap,
+                          child: Row(
+                            children: [
+                              const Text(
+                                'Детальніше',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(3),
+                                decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.orange),
+                                child: const Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 15,
+                                  color: Colors.white,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   )
                 ],
               ),

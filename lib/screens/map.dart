@@ -1,10 +1,12 @@
 import 'package:dyplom/components/map_place_preview.dart';
 import 'package:dyplom/screens/university.dart';
+import 'package:dyplom/util/hive_util.dart';
 import 'package:dyplom/util/map_util.dart';
 import 'package:dyplom/util/search_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:collection/collection.dart';
 
 import '../data/db/entity/university.dart';
 
@@ -47,10 +49,17 @@ class _MapPageState extends State<MapPage> {
     });
   }
 
-  void _onMarkerTap(University university) {
+  Future<void> _onMarkerTap(University university) async {
+    university.favourite = await _checkIfFav(university);
+
     setState(() {
       _selectedUniversity = university;
     });
+  }
+
+  Future<bool> _checkIfFav(University university) async {
+    final favIdList = await HiveUtil.getFavouriteUniversities();
+    return favIdList.contains(university.id);
   }
 
   void _onDetailsTap() {
